@@ -22,7 +22,7 @@ int main(int agrc, char *argv[])
     message.mtype = getpid();
     recieveRunningTime = msgget(2, 0666 | IPC_CREAT);//message queue to recieve message from the server
     Down(recieveRunningTime);
-    printf("inside process\n");
+    //printf("inside process\n");
     //printf("my pid = %d\n",getpid());
     //printf("my remaining time = %d\n",message.mRemainingTime);
     remainingtime = message.mRemainingTime;
@@ -36,7 +36,7 @@ int main(int agrc, char *argv[])
         Down(recieveRunningTime);
         remainingtime = message.mRemainingTime;
         int clock =getClk();
-        printf("my pid = %ld, my remaining time = %d at time = %d\n",message.mtype,remainingtime,clock);
+        //printf("my pid = %ld, my remaining time = %d at time = %d\n",message.mtype,remainingtime,clock);
     }
     
 

@@ -81,22 +81,22 @@ int main(int argc, char* argv[])
         fscanf(f, "%s", buff);
         temp.remainingTime = temp.runningTime = atoi(buff);
         
-        //printf("rem time = %d, run time = %d\n",temp.remainingTime,temp.runningTime);
+        ////printf("rem time = %d, run time = %d\n",temp.remainingTime,temp.runningTime);
         fscanf(f, "%s", buff);
         temp.priority = atoi(buff);
         
         
         enqueue(Q,temp);
-        	//printf("%d ",atoi(buff));
+        	////printf("%d ",atoi(buff));
 
-        //printf("\n");
+        ////printf("\n");
         processNum++;
 
     }
     
     /*for (int i = 0; i < processNum ; i ++)
     {
-    	printf("%d %d %d\n",processArr[i].arrivalTime,processArr[i].runningTime,processArr[i].priority);
+    	//printf("%d %d %d\n",processArr[i].arrivalTime,processArr[i].runningTime,processArr[i].priority);
      
     }*/
 
@@ -125,16 +125,16 @@ int main(int argc, char* argv[])
         exit(-1);
     }
     *shmaddrAlgorithm = algorithm;
-    //printf("%d\n",quantum);
+    ////printf("%d\n",quantum);
     // 3. Initiate and create the scheduler and clock processes.
     char buf[50];
     getcwd(buf,sizeof(buf));
-    //printf("%s\n",buf);
+    ////printf("%s\n",buf);
     
     int schedulerPid = fork();
     if (schedulerPid == 0)
     {
-        //printf("Scheduler\n");
+        ////printf("Scheduler\n");
         strcat(buf,"/scheduler.out");
         execl(buf,"scheduler.out",NULL);
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
             // To get time use this function. 
             int currentTime = getClk();
             
-            printf("Current Time is %d\n", currentTime);
+            //printf("Current Time is %d\n", currentTime);
             
             // TODO Generation Main Loop
 
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
             
             int prevTime;
             while(processNum>0){
-                //printf("processnum = %d\n",processNum);
+                ////printf("processnum = %d\n",processNum);
             // 6. Send the information to the scheduler at the appropriate time.
                 ProcessData temp;
                 if(peek(Q,&temp)){
@@ -208,7 +208,7 @@ int main(int argc, char* argv[])
                         if(dequeue(Q,&temp))
                         {
                             *shmaddr = temp;
-                            //printf("sending\n");
+                            ////printf("sending\n");
                             processNum--;
                         }
                     }
@@ -218,32 +218,34 @@ int main(int argc, char* argv[])
                 prevTime = currentTime;
                 currentTime = getClk();
                 if(prevTime!=currentTime){
-                    printf("Current Time is %d\n", currentTime);
+                    //printf("Current Time is %d\n", currentTime);
                 }
                 
+               
                 down(sem2);
+
             }
             ProcessData temp;
             temp.id = -1;
             *shmaddr = temp;
-            //printf("%d\n",shmaddr->id);
+            //printf("PG sending %d, time = %d\n",shmaddr->id,getClk());
             up(sem1);
             //print(sem2);
-            //printf("send -1\n");
+            ////printf("send -1\n");
             down(sem2);
-            //printf("sent -1\n");
+            ////printf("sent -1\n");
             // 7. Clear clock resources
             
             
             shmctl(shmid, IPC_RMID,(struct shmid_ds *)0);
             shmctl(shmidAlgo, IPC_RMID,(struct shmid_ds *)0);
-            //printf("clean memory\n");
-            printf("finished\n");
+            ////printf("clean memory\n");
+            ////printf("finished sending (PG)\n");
             int* stat_loc;
             wait(stat_loc);
             semctl(sem1,0,IPC_RMID);
             semctl(sem2,0,IPC_RMID);
-            printf("done\n");
+            //printf("done\n");
             
 	        destroyClk(true);
         }
@@ -252,7 +254,7 @@ int main(int argc, char* argv[])
 void clearResources(int signum)
 {
     //TODO Clears all resources in case of interruption
-    //printf("\nDeleting Shared Memory and Semaphore Set\n");
+    ////printf("\nDeleting Shared Memory and Semaphore Set\n");
     shmctl(shmid, IPC_RMID, (struct shmid_ds*)0);
     exit(-1);
 }
